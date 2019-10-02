@@ -12,8 +12,8 @@ func main()  {
 	isCool = true
 
 	// shorthand assignment that must be done within a function
-	number := +254718433329
+	email, number := "edwin@gmai.com", +254718433329
 
-	fmt.Println(name, age, isCool, number)
+	fmt.Println(name, age, isCool, email, number)
 	fmt.Printf("%T\n", isCool)
 }
