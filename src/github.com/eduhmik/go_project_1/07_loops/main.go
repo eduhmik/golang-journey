@@ -23,7 +23,7 @@ func main() {
 	}
 	// calling the fibnonacci function inside the main func
 
-	fib(50)
+	fib(10)
 
 }
 
