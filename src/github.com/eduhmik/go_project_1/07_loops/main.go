@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-func main()  {
+func main() {
 
 	// for loop
 	for i := 1; i <= 10; i++ {
@@ -21,4 +21,15 @@ func main()  {
 			fmt.Println(k)
 		}
 	}
+
+	fib(50)
+
+}
+
+// Fibonacci sequence 
+
+func fib(n int) {
+    for i, j := 0, 1; j < n; i, j = i+j,i {
+        fmt.Println(i)
+    }
 }
