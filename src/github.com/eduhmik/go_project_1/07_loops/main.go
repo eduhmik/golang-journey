@@ -21,12 +21,13 @@ func main() {
 			fmt.Println(k)
 		}
 	}
+	// calling the fibnonacci function inside the main func
 
 	fib(50)
 
 }
 
-// Fibonacci sequence 
+// Fibonacci sequence
 
 func fib(n int) {
     for i, j := 0, 1; j < n; i, j = i+j,i {
