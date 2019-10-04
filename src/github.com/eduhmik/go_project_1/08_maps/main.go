@@ -6,58 +6,64 @@ import (
 )
 
 //function types
-type mapf func(interface{}, interface{}) interface{}
+type mapf func(interface{}) interface{}
 
 // func(value, memo) interface
 type reducef func(interface{}, interface{}) interface{}
-type filterf func(interface{}) interface{}
-
+type filterf func(interface{}) bool
 
 func main() {
+	a := []int{1, 2, 3, 4}
 
-	// define your map
-
-	emails := make(map[string] string)
-	// alternative of writing a map function
-
-	// emails := map[string]string{"email": "bob@gmail.com"}
-
-	// assign key value pairs
-
-	emails["email"] = "bob@gmail.com"
-
-	emails["email1"] = "sharon@gmail.com"
-
-	emails["email2"] = "eduh@gmail.com"
-
-	fmt.Println("Map:", emails)
-
-	// delate an email
-	delete(emails, "email")
-	fmt.Println("new list array after deleting an item ", emails)
-
-	filteredEmailsList := Filter(emails, func(val interface{}) interface{} {
-		fmt.Println(val)
-		return val
+	//Multiply everything by 2
+	b := Map(a, func(val interface{}) interface{} {
+		return val.(int) * 2
 	})
 
-	fmt.Println("FILTER", emails, filteredEmailsList)
+	//Shoud be [2,4,6,8]
+	fmt.Println("MAP:", a, b)
 
+	//Summation
+	c := Reduce(b, 0, func(val interface{}, memo interface{}) interface{} {
+		return memo.(int) + val.(int)
+	})
+
+	//Should be 20
+	fmt.Println("REDUCE:", b, c)
+
+	//Check if the number is divisble by 4
+	d := Filter(b, func(val interface{}) bool {
+		return val.(int)%4 == 0
+	})
+
+	//Should be [4,8]
+	fmt.Println("FILTER:", b, d)
 }
 
+//Map(slice, func)
 func Map(in interface{}, fn mapf) interface{} {
 	val := reflect.ValueOf(in)
 	out := make([]interface{}, val.Len())
 
 	for i := 0; i < val.Len(); i++ {
-		out[i] = fn(val.Index(i).Interface(), val.Index(i).Interface())
+		out[i] = fn(val.Index(i).Interface())
 	}
 
 	return out
 }
 
-// filter a map function
+//Reduce(slice, starting value, func)
+func Reduce(in interface{}, memo interface{}, fn reducef) interface{} {
+	val := reflect.ValueOf(in)
 
+	for i := 0; i < val.Len(); i++ {
+		memo = fn(val.Index(i).Interface(), memo)
+	}
+
+	return memo
+}
+
+//Filter(slice, predicate func)
 func Filter(in interface{}, fn filterf) interface{} {
 	val := reflect.ValueOf(in)
 	out := make([]interface{}, 0, val.Len())
@@ -65,11 +71,10 @@ func Filter(in interface{}, fn filterf) interface{} {
 	for i := 0; i < val.Len(); i++ {
 		current := val.Index(i).Interface()
 
-		out = append(out, current)
-
+		if fn(current) {
+			out = append(out, current)
+		}
 	}
 
 	return out
 }
-
-// reduce a map function
